@@ -22,7 +22,7 @@ public class ItemManager {
     public static void updateItems(ArrayList<Item> items, String playerId) {
         try {
 
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(URL, "root", null);
             PreparedStatement ps;
 
@@ -81,7 +81,7 @@ public class ItemManager {
     public static boolean itemExists(String player_id, String item_id) {
         boolean status = false;
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(URL, "root", null);
 
             PreparedStatement ps = con.prepareStatement("select * from INVENTORY where PLAYER_ID=? AND ITEM_ID=?");

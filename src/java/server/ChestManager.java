@@ -21,7 +21,7 @@ public class ChestManager {
 
         try {
 
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(UpdateTables.URL, "root", null);
             PreparedStatement ps;
 
@@ -73,7 +73,7 @@ public class ChestManager {
     public static boolean chestExists(String player_id, String uid) {
         boolean status = false;
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(UpdateTables.URL, "root", null);
 
             PreparedStatement ps = con.prepareStatement("select * from CHESTS where PLAYER_ID=? AND UID=?");

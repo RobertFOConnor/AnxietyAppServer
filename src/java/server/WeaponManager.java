@@ -22,7 +22,7 @@ public class WeaponManager {
 
         try {
 
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(UpdateTables.URL, "root", null);
             PreparedStatement ps;
 
@@ -77,7 +77,7 @@ public class WeaponManager {
     public static boolean weaponExists(String player_id, String uid) {
         boolean status = false;
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(UpdateTables.URL, "root", null);
 
             PreparedStatement ps = con.prepareStatement("select * from WEAPONS where PLAYER_ID=? AND WEAPON_UID=?");

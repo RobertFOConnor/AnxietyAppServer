@@ -45,7 +45,7 @@ public class UpdateTables extends HttpServlet {
         ObjectOutputStream out = new ObjectOutputStream(response.getOutputStream());
 
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(URL, "root", null);
             PreparedStatement ps;
 
@@ -111,7 +111,7 @@ public class UpdateTables extends HttpServlet {
     public static boolean playerExists(String player_id) {
         boolean status = false;
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(URL, "root", null);
 
             PreparedStatement ps = con.prepareStatement("select * from PLAYERS where ID=?");
@@ -128,7 +128,7 @@ public class UpdateTables extends HttpServlet {
     public static boolean locationExists(String player_id, float lat, float lng) {
         boolean status = false;
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(URL, "root", null);
 
             PreparedStatement ps = con.prepareStatement("select * from LOCATIONS where PLAYER_ID=? AND LAT=? AND LNG=?");

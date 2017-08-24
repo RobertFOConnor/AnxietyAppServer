@@ -76,7 +76,7 @@ public class PlayerSearch extends HttpServlet {
     public boolean validate(String name) {
         boolean status = false;
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(URL, "root", null);
 
             PreparedStatement ps = con.prepareStatement("select * from PLAYERS where NAME=?");
