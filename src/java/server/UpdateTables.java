@@ -102,7 +102,7 @@ public class UpdateTables extends HttpServlet {
                 String playerId = player.getId();
 
                 if (!answerExists(playerId, answer.getQuestion(), answer.getDate())) {
-                    ps = con.prepareStatement("INSERT INTO SURVEY(PLAYER_ID, QUESTION, ANSWER, DATE) values(?,?,?);");
+                    ps = con.prepareStatement("INSERT INTO SURVEY(PLAYER_ID, QUESTION, ANSWER, DATE) values(?,?,?,?);");
                     ps.setString(1, playerId);
                     ps.setInt(2, answer.getQuestion());
                     ps.setInt(3, answer.getAnswer());
