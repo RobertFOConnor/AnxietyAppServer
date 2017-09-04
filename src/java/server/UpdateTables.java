@@ -22,6 +22,7 @@ import server.game.Chest;
 import server.game.Item;
 import server.game.Location;
 import server.game.Player;
+import server.game.SurveyAnswer;
 import server.game.Weapon;
 
 /**
@@ -40,7 +41,6 @@ public class UpdateTables extends HttpServlet {
         ArrayList<Item> items = getItems(request);
         ArrayList<Weapon> weapons = getWeapons(request);
         ArrayList<Location> locations = getLocations(request);
-        ArrayList<Chest> chests = getChests(request);
 
         ObjectOutputStream out = new ObjectOutputStream(response.getOutputStream());
 
@@ -75,7 +75,7 @@ public class UpdateTables extends HttpServlet {
 
             ItemManager.updateItems(items, player.getId());
             WeaponManager.updateWeapons(weapons, player.getId());
-            ChestManager.updateChests(chests, player.getId());
+            ChestManager.updateChests(getChests(request), player.getId());
 
             for (Location location : locations) {
                 String playerId = player.getId();
@@ -97,6 +97,21 @@ public class UpdateTables extends HttpServlet {
                 }
                 ps.executeUpdate();
             }
+            
+            for (SurveyAnswer answer : getSurveyAnswers(request)) {
+                String playerId = player.getId();
+
+                if (!answerExists(playerId, answer.getQuestion(), answer.getDate())) {
+                    ps = con.prepareStatement("INSERT INTO SURVEY(PLAYER_ID, QUESTION, ANSWER, DATE) values(?,?,?);");
+                    ps.setString(1, playerId);
+                    ps.setInt(2, answer.getQuestion());
+                    ps.setInt(3, answer.getAnswer());
+                    ps.setString(4, answer.getDate());
+                }
+                ps.executeUpdate();
+            }
+            
+            
             con.close();
             out.writeObject("Player updated!");
             System.out.println("Player " + player.getName() + " has been updated! With " + items.size() + " items, " + weapons.size() + " weapons, " + locations.size() + " locations. time:"+new Timestamp(System.currentTimeMillis()).toString());
@@ -135,6 +150,25 @@ public class UpdateTables extends HttpServlet {
             ps.setString(1, player_id);
             ps.setFloat(2, lat);
             ps.setFloat(3, lng);
+            ResultSet rs = ps.executeQuery();
+            status = rs.next();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return status;
+    }
+    
+    public static boolean answerExists(String player_id, int question, String date) {
+        boolean status = false;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(URL, "root", null);
+
+            PreparedStatement ps = con.prepareStatement("select * from SURVEY where PLAYER_ID=? AND QUESTION=? AND DATE=?");
+            ps.setString(1, player_id);
+            ps.setInt(2, question);
+            ps.setString(3, date);
             ResultSet rs = ps.executeQuery();
             status = rs.next();
 
@@ -208,4 +242,17 @@ public class UpdateTables extends HttpServlet {
         return chests;
     }
 
+    private ArrayList<SurveyAnswer> getSurveyAnswers(HttpServletRequest request) {
+        ArrayList<SurveyAnswer> answers = new ArrayList();
+        int count = 0;
+        while (request.getParameter("survey_answer_" + count) != null) {
+            answers.add(new SurveyAnswer(
+                    Integer.parseInt(request.getParameter("survey_question_" + count)),
+                    Integer.parseInt(request.getParameter("survey_answer_" + count)),
+                    request.getParameter("survey_date_" + count)));
+            count++;
+        }
+        return answers;
+    }
+    
 }

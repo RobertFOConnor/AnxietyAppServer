@@ -32,39 +32,38 @@ public class PlayerSearch extends HttpServlet {
         response.setContentType("text/html");
 
         String s1 = request.getParameter("name");
-        
+
         ServletOutputStream out = response.getOutputStream();
 
         if (validate(s1)) {
-            
+
             Player player = getPlayer();
 
             try {
                 String str = "{ \"id\": \"" + rs.getString("ID") + "\", \"name\": \"" + rs.getString("NAME") + "\" }";
-               
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Player Stats</title>");   
-            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\""+ request.getContextPath() +"/css/playerSearch.css\"/>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>"+player.getName()+"</h1>");
-            out.println("<p>Level: "+player.getLevel()+"</p>");
-            out.println("<p>Xp: "+player.getXp()+"</p>");
-            out.println("<p>HP: "+player.getCurrHealth()+"/"+player.getMaxHealth()+"</p>");
-            out.println("<p>Money: $"+player.getMoney()+"</p>");
-            out.println("</body>");
-            out.println("</html>");
-                
-                
+
+                out.println("<!DOCTYPE html>");
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>Player Stats</title>");
+                out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + request.getContextPath() + "/css/playerSearch.css\"/>");
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>" + player.getName() + "</h1>");
+                out.println("<p>Level: " + player.getLevel() + "</p>");
+                out.println("<p>Xp: " + player.getXp() + "</p>");
+                out.println("<p>HP: " + player.getCurrHealth() + "/" + player.getMaxHealth() + "</p>");
+                out.println("<p>Money: $" + player.getMoney() + "</p>");
+                out.println("</body>");
+                out.println("</html>");
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             try {
                 out.write("Player could not be found or doesn't exist.".getBytes());
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -97,14 +96,14 @@ public class PlayerSearch extends HttpServlet {
 
     private Player getPlayer() {
         try {
-        return new Player(rs.getString("ID"),
-                rs.getString("NAME"),
-                rs.getInt("LEVEL"),
-                rs.getInt("XP"),
-                rs.getInt("MONEY"),
-                rs.getInt("MAX_HEALTH"),
-                rs.getInt("CURR_HEALTH"),
-                rs.getString("BASE_SWORD"));
+            return new Player(rs.getString("ID"),
+                    rs.getString("NAME"),
+                    rs.getInt("LEVEL"),
+                    rs.getInt("XP"),
+                    rs.getInt("MONEY"),
+                    rs.getInt("MAX_HEALTH"),
+                    rs.getInt("CURR_HEALTH"),
+                    rs.getString("BASE_SWORD"));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
